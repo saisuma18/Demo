@@ -2,50 +2,26 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout Code') {
+        stage('Clone Repository') {
             steps {
-                git 'https://github.com/saisuma18/Demo.git' // replace with your repo
+                git 'https://github.com/saisuma18/Demo.git'
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                echo 'No dependencies for static HTML app'
-            }
-        }
-
-        stage('Run Basic Tests') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    def indexExists = fileExists('index.html')
-                    if (!indexExists) {
-                        error('index.html not found!')
-                    }
+                    docker.build('Demo 1')
                 }
             }
         }
 
-        stage('Build/Package') {
+        stage('Run Docker Container') {
             steps {
-                echo 'Static app — no build step needed'
+                script {
+                    docker.image('Demo 1').run('-d -p 8080:80')
+                }
             }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploy step here (FTP, copy to /var/www, etc.)'
-                // Example (copy to /var/www/html):
-                // sh 'cp -r * /var/www/html/'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Deployment successful!'
-        }
-        failure {
-            echo 'Pipeline failed.'
         }
     }
 }
