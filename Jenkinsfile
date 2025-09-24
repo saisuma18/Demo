@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build('Demo 1')
+                    docker.build('Demo1')
                 }
             }
         }
@@ -19,7 +19,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    docker.image('Demo 1').run('-d -p 8080:80')
+                    docker.image('Demo1').run('-d -p 8080:80')
                 }
             }
         }
